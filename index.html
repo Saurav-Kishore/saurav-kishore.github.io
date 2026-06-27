@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saurav Kishore — Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-page:       #1a1d23;
+  --bg-surface:    #21242b;
+  --bg-bubble:     #2a2e38;
+  --bg-chip:       #252830;
+  --border-chip:   #3a3d47;
+  --border-divider:#2e313a;
+  --text-primary:  #e8e8ec;
+  --text-secondary:#9ea1ab;
+  --text-chip:     #a8abb8;
+  --amber:         #f59e0b;
+  --amber-dark:    #d97706;
+  --font-body:     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Dot-grid background ──────────────────────────────────────────────── */
+body {
+  background-color: var(--bg-page);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ── App Shell ────────────────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  height: -webkit-fill-available;
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--bg-page);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Top Bar ──────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--bg-page);
+  border-bottom: 1px solid var(--border-divider);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.topbar-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar-info .name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-info .status {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.3;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* ── Chat Area ────────────────────────────────────────────────────────── */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 18px 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  /* dot-grid pattern overlays the body bg */
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.chat-area::-webkit-scrollbar { width: 5px; }
+.chat-area::-webkit-scrollbar-track { background: transparent; }
+.chat-area::-webkit-scrollbar-thumb { background: var(--border-divider); border-radius: 3px; }
+.chat-area::-webkit-scrollbar-thumb:hover { background: var(--text-chip); }
+
+/* ── Message Row ──────────────────────────────────────────────────────── */
+.msg-row {
+  display: flex;
+  margin-bottom: 4px;
+  animation: msgSlideUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes msgSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.msg-bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  background: var(--bg-bubble);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.55;
+  word-wrap: break-word;
+  border-radius: 6px 12px 12px 12px;
+  border-left: 2px solid var(--amber);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: box-shadow 0.2s;
+}
+
+.msg-bubble:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+
+.msg-bubble a {
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 500;
+}
+.msg-bubble a:hover { text-decoration: underline; }
+
+.msg-time {
+  display: block;
+  text-align: right;
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  user-select: none;
+  letter-spacing: 0.2px;
+}
+
+/* ── Typing Indicator ─────────────────────────────────────────────────── */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 2px;
+  animation: fadeIn 0.25s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--bg-bubble);
+  border-radius: 6px 12px 12px 12px;
+  border-left: 2px solid var(--amber);
+}
+
+.typing-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #5a5e6a;
+  animation: dotPulse 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: 0.0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+  40%            { transform: scale(1);   opacity: 1;   }
+}
+
+.typing-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.cursor-blink {
+  color: var(--amber);
+  animation: cursorBlink 1s step-end infinite;
+  margin-left: 1px;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* ── Skill Chips ──────────────────────────────────────────────────────── */
+.skill-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 3px 4px 3px 0;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-chip);
+  color: var(--text-chip);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+}
+
+.skill-chip:hover {
+  border-color: var(--amber);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.12);
+}
+
+/* ── New Message Toast ────────────────────────────────────────────────── */
+.new-msg-toast {
+  display: none;
+  position: absolute;
+  bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  background: var(--bg-surface);
+  border-left: 2px solid var(--amber);
+  border-radius: 6px 10px 10px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  z-index: 20;
+  animation: toastIn 0.25s ease both;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.new-msg-toast:hover {
+  color: var(--amber);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app { max-width: 100%; }
+  .topbar { padding: 10px 14px; }
+  .topbar-info .name { font-size: 15px; }
+  .chat-area { padding: 14px 12px 10px; }
+  .msg-bubble { max-width: 90%; font-size: 13.5px; }
+  .avatar { width: 38px; height: 38px; font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="avatar" id="avatarInitial">SK</div>
+    <div class="topbar-info">
+      <div class="name" id="contactName">Saurav Kishore</div>
+      <div class="status" id="contactStatus">
+        <span class="status-dot"></span> AI Agent active
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-area" id="chatArea"></div>
+
+  <!-- Toast lives outside chat-area so it never scrolls with content -->
+  <div class="new-msg-toast" id="newMsgToast">↓ <span id="toastCount">0</span> new messages</div>
+
+</div>
+
+<script>
+// ── Profile Data (embedded) ────────────────────────────────────────────────
+const PROFILE = {
+  name: "Saurav Kishore",
+  title: "Senior Engineer at Qualcomm | AI & Android Expert",
+  location: "Hyderabad, India",
+  education: "B.Tech in Computer Science & Engineering",
+  university: "The LNM Institute of Information Technology, Jaipur",
+  cgpa: "9.01/10.00",
+  bio: "Engineered a 24/7 autonomous Multi-Agent AI system for TrustZone security at Qualcomm. Recognised as a top 10% performer at Samsung, spearheaded one of the first AI projects at Samsung Noida — which led to a dedicated 15-engineer AI task force. Built an AI-driven Knowledge Graph powering personalised recommendations for 20M+ OneUI 7 devices.",
+  skills: [
+    "Java", "Kotlin", "Python", "Android", "MVVM",
+    "Kotlin Coroutines", "Jetpack Compose", "System Design",
+    "LLM / AI Agents", "RxJava", "Hilt / Dagger",
+    "Room / SQLite", "Retrofit", "Scikit-learn",
+    "Git / Gerrit", "CI/CD"
+  ],
+  experience: [
+    { role: "Senior Engineer", company: "Qualcomm", years: "Jul 2025 – Present" },
+    { role: "Engineer / Android App Developer", company: "Samsung Electronics", years: "Jul 2021 – Jul 2025" },
+    { role: "R&D Intern", company: "Samsung Electronics", years: "Jan 2021 – May 2021" }
+  ],
+  projects: [
+    "Galaxy Z Flip5 Cover Screen Phone App — led 3 devs, 10M+ users, won Excellence Award",
+    "24/7 Autonomous Multi-Agent AI System — reduced manual monitoring by ~64%, saved ~35 hrs/week",
+    "AI Knowledge Graph for Personalised Recommendations — deployed to 20M+ OneUI 7 devices",
+    "WearOS Phone App Refactoring — led 5 devs, Kotlin/MVVM migration, ~48% faster launch, ~85% test coverage"
+  ],
+  patents: [
+    "System & Method for Prioritising and Contextualising User Data on User Equipment (Indian Patent, filed Dec 2024)"
+  ],
+  socials: {
+    linkedin: "linkedin.com/in/sauravkishore",
+    github: "github.com/Saurav-Kishore",
+    email: "saurav_kishore@outlook.com"
+  }
+};
+
+// ── App ─────────────────────────────────────────────────────────────────────
+(function () {
+  const chatArea   = document.getElementById('chatArea');
+  const avatarEl   = document.getElementById('avatarInitial');
+  const nameEl     = document.getElementById('contactName');
+  const statusEl   = document.getElementById('contactStatus');
+
+  const profile = PROFILE;
+
+  // ── Update header ──────────────────────────────────────────────────────
+  const initials = profile.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  avatarEl.textContent = initials;
+  nameEl.textContent   = profile.name;
+  statusEl.innerHTML = '<span class="status-dot"></span> AI Agent active';
+
+  // ── Build message queue ────────────────────────────────────────────────
+  const messages = [];
+
+  messages.push("Hi there! 👋<br><span style='font-size:13px;color:var(--text-secondary);'>Welcome to my profile</span>");
+
+  messages.push(
+    "My name is <strong>" + profile.name + "</strong>.<br>" +
+    "<span style='color:var(--text-secondary);'>I'm a " + profile.title + " based in " + profile.location + ".</span>"
+  );
+
+  if (profile.bio) {
+    messages.push(profile.bio);
+  }
+
+  var eduMsg = "🎓 I studied <strong>" + profile.education + "</strong> at <em>" + profile.university + "</em>";
+  if (profile.cgpa) {
+    eduMsg += " <span style='color:var(--amber);font-weight:600;'>(CGPA: " + profile.cgpa + ")</span>";
+  }
+  eduMsg += ".";
+  messages.push(eduMsg);
+
+  if (profile.skills && profile.skills.length) {
+    const chips = profile.skills.map(s =>
+      '<span class="skill-chip">' + s + '</span>'
+    ).join(' ');
+    messages.push("🛠️ My toolkit:<br><br>" + chips);
+  }
+
+  if (profile.experience && profile.experience.length) {
+    let expHtml = "💼 <strong>Work Experience</strong><br><br>";
+    profile.experience.forEach(e => {
+      expHtml +=
+        '<strong>' + e.role + '</strong><br>' +
+        '<span style="color:var(--text-secondary);">' + e.company +
+        ' &nbsp;·&nbsp; <span style="color:var(--text-secondary);font-size:12px;font-style:italic;">' + e.years + '</span></span><br><br>';
+    });
+    messages.push(expHtml);
+  }
+
+  if (profile.projects && profile.projects.length) {
+    let projHtml = "🚀 <strong>Projects I've built</strong><br><br>";
+    profile.projects.forEach(p => {
+      projHtml += '— ' + p + '<br><br>';
+    });
+    messages.push(projHtml);
+  }
+
+  if (profile.patents && profile.patents.length) {
+    let patentHtml = "📜 <strong>Patents</strong><br><br>";
+    profile.patents.forEach(p => {
+      patentHtml += '🏆 ' + p + '<br>';
+    });
+    messages.push(patentHtml);
+  }
+
+  if (profile.socials) {
+    let socialHtml = "📬 <strong>Let's connect!</strong><br><br>";
+    const icons = { github:'🐙', linkedin:'💼', twitter:'🐦', email:'✉️' };
+    Object.entries(profile.socials).forEach(([platform, handle]) => {
+      const icon = icons[platform] || '🔗';
+      let href;
+      if (platform === 'email') {
+        href = 'mailto:' + handle;
+      } else {
+        href = 'https://' + handle;
+      }
+      socialHtml += icon + ' <a href="' + href + '" target="_blank" rel="noopener">' +
+                    '<strong>' + platform.charAt(0).toUpperCase() + platform.slice(1) +
+                    '</strong>: ' + handle + '</a><br>';
+    });
+    messages.push(socialHtml);
+  }
+
+  // Closing two-part message
+  messages.push("This agent was built to represent Saurav Kishore — an AI & Android engineer who builds autonomous systems.");
+  messages.push("📬 Reach him directly via the links above.");
+
+  // ── Helpers ──────────────────────────────────────────────────────────
+  let unreadCount = 0;
+  let scrollProgrammatic = false;
+  const newMsgToast = document.getElementById('newMsgToast');
+  const toastCount  = document.getElementById('toastCount');
+
+  function isNearBottom() {
+    // Account for browser chrome (Samsung Internet bottom bar, iOS Safari bars)
+    var visualHeight = window.visualViewport ? window.visualViewport.height : chatArea.clientHeight;
+    var distance = chatArea.scrollHeight - chatArea.scrollTop - visualHeight;
+    return distance < 120;
+  }
+
+  function updateToast() {
+    if (unreadCount > 0) {
+      toastCount.textContent = unreadCount;
+      newMsgToast.style.display = 'block';
+      newMsgToast.style.animation = 'none';
+      newMsgToast.offsetHeight;
+      newMsgToast.style.animation = 'toastIn 0.25s ease both';
+    } else {
+      newMsgToast.style.display = 'none';
+    }
+  }
+
+  function scrollToLatest() {
+    scrollProgrammatic = true;
+    const last = chatArea.lastElementChild;
+    if (last) {
+      last.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+    setTimeout(function () { scrollProgrammatic = false; }, 600);
+  }
+
+  // User manually scrolled to bottom — dismiss toast
+  chatArea.addEventListener('scroll', function () {
+    if (scrollProgrammatic) return;
+    if (isNearBottom() && unreadCount > 0) {
+      unreadCount = 0;
+      updateToast();
+    }
+  });
+
+  // Click toast to jump to latest
+  newMsgToast.addEventListener('click', function () {
+    unreadCount = 0;
+    updateToast();
+    scrollToLatest();
+  });
+
+  function nowTime() {
+    const d = new Date();
+    return d.getHours().toString().padStart(2,'0') + ':' +
+           d.getMinutes().toString().padStart(2,'0');
+  }
+
+  function createTypingIndicator() {
+    const row = document.createElement('div');
+    row.className = 'typing-indicator';
+
+    const dotsDiv = document.createElement('div');
+    dotsDiv.className = 'typing-dots';
+    dotsDiv.innerHTML = '<span></span><span></span><span></span>';
+    row.appendChild(dotsDiv);
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'typing-label';
+    labelSpan.innerHTML = 'AI Agent composing<span class="cursor-blink">&#9608;</span>';
+    row.appendChild(labelSpan);
+
+    chatArea.appendChild(row);
+    // Scroll indicator into view so it's fully visible (matching toast-click behavior)
+    if (isNearBottom()) {
+      requestAnimationFrame(function () {
+        row.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+    }
+    return row;
+  }
+
+  function createBubble(html) {
+    const row = document.createElement('div');
+    row.className = 'msg-row';
+    row.innerHTML =
+      '<div class="msg-bubble">' + html +
+      '<span class="msg-time">' + nowTime() + '</span></div>';
+    chatArea.appendChild(row);
+    return row;
+  }
+
+  // ── Sequential reveal ────────────────────────────────────────────────
+  async function typeDelay(ms) {
+    await new Promise(r => setTimeout(r, ms));
+  }
+
+  async function revealMessages() {
+    // Pre-compute text lengths for dynamic typing durations
+    const msgLengths = messages.map(m => m.replace(/<[^>]*>/g, '').length);
+
+    await typeDelay(400);
+
+    for (let i = 0; i < messages.length; i++) {
+      const typingDuration = Math.min(4500, 300 + msgLengths[i] * 14);
+      const typing = createTypingIndicator();
+      await typeDelay(typingDuration);
+
+      typing.remove();
+
+      // Check scroll position NOW — user may have scrolled during typing
+      const userAtBottom = isNearBottom();
+
+      const row = createBubble(messages[i]);
+
+      if (userAtBottom) {
+        requestAnimationFrame(function () {
+          scrollProgrammatic = true;
+          row.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          setTimeout(function () { scrollProgrammatic = false; }, 600);
+        });
+      } else {
+        unreadCount++;
+        updateToast();
+      }
+
+      await typeDelay(300);
+    }
+
+    // After last message, update status
+    await typeDelay(800);
+    statusEl.textContent = "You're chatting with an AI agent";
+  }
+
+  revealMessages();
+})();
+</script>
+</body>
+</html>
